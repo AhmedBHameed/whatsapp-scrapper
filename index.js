@@ -2,8 +2,8 @@ const { writeFileSync, readFileSync } = require("fs");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require("qrcode-terminal");
 
-const myGroupName = "M&A_4";
-const contactName = "Amit";
+// const myGroupName = "M&A_4";
+// const contactName = "Amit";
 
 const client = new Client({
   authStrategy: new LocalAuth(),
@@ -13,20 +13,20 @@ const client = new Client({
   },
 });
 
-function readContacts() {
-  return JSON.parse(readFileSync("contacts.json", "utf-8"));
+function readContacts(path) {
+  return JSON.parse(readFileSync(path, "utf-8"));
 }
 
-function listMethods(obj) {
-  let properties = new Set();
-  let currentObj = obj;
-  do {
-    Object.getOwnPropertyNames(currentObj).map((item) => properties.add(item));
-  } while ((currentObj = Object.getPrototypeOf(currentObj)));
-  return [...properties.keys()].filter(
-    (item) => typeof obj[item] === "function"
-  );
-}
+// function listMethods(obj) {
+//   let properties = new Set();
+//   let currentObj = obj;
+//   do {
+//     Object.getOwnPropertyNames(currentObj).map((item) => properties.add(item));
+//   } while ((currentObj = Object.getPrototypeOf(currentObj)));
+//   return [...properties.keys()].filter(
+//     (item) => typeof obj[item] === "function"
+//   );
+// }
 
 client.on("qr", (qr) => {
   // Generate and scan this code with your phone
@@ -40,19 +40,19 @@ client.on("ready", async () => {
   const groups = await client.getChats();
 
   // const contacts = await client.getContacts();
-  // writeFileSync("chats.json", JSON.stringify(chats, null, 2));
+  writeFileSync("./data/chats.json", JSON.stringify(groups, null, 2));
 
-  const selectedGroup = groups.find((chat) => chat.name === myGroupName);
+  // const selectedGroup = groups.find((chat) => chat.name === myGroupName);
 
-  console.log("GROUP RESULTS: ", selectedGroup, selectedGroup?.isGroup);
+  // console.log("GROUP RESULTS: ", selectedGroup, selectedGroup?.isGroup);
 
-  const participants = ["9647722105809@c.us", "9647513716149@c.us"];
+  // const participants = ["9647722105809@c.us", "9647513716149@c.us"];
 
-  await selectedGroup.addParticipants(
-    participants /** contactToAdd.id._serialized */
-  ); // Pass an array of contact IDs [id1, id2, id3 .....]
+  // await selectedGroup.addParticipants(
+  //   participants /** contactToAdd.id._serialized */
+  // ); // Pass an array of contact IDs [id1, id2, id3 .....]
 
-  console.log(`Successfully added ${contactName} to the group ${myGroupName}`);
+  // console.log(`Successfully added ${contactName} to the group ${myGroupName}`);
 });
 
 client.on("message", (msg) => {
@@ -66,6 +66,3 @@ client.on("remote_session_saved", () => {
 });
 
 client.initialize();
-
-const contacts = readContacts();
-console.log(contacts.length);
