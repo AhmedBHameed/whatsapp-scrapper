@@ -38,9 +38,10 @@ client.on("ready", async () => {
   console.log("Client is ready!");
 
   const groups = await client.getChats();
+  const contacts = await client.getContacts();
 
-  // const contacts = await client.getContacts();
   writeFileSync("./data/chats.json", JSON.stringify(groups, null, 2));
+  writeFileSync("./data/contacts.json", JSON.stringify(contacts, null, 2));
 
   // const selectedGroup = groups.find((chat) => chat.name === myGroupName);
 
